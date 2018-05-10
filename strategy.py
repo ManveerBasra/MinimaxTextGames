@@ -4,7 +4,6 @@ A module for strategies.
 from typing import Union
 from game_state import GameState
 from game import Game
-from stack import Stack
 from node import Node
 
 
@@ -115,15 +114,14 @@ def iterative_minimax_strategy(game: Game) -> Union[str, int]:
     current_state = game.current_state
 
     # Create a stack to hold Nodes for iterative minimax
-    stack = Stack()
-    stack.add(Node(current_state, None))
+    stack = [Node(current_state, None)]
 
     best_move = None
 
     # Keep updating and getting scores while the stack isn't empty
-    while not stack.is_empty():
+    while len(stack) != 0:
         # Get item at top of stack and set some intermediate variables
-        top = stack.remove()
+        top = stack.pop()
         player = top.current_state.get_current_player_name()
         opponent = 'p1' if player == 'p2' else 'p2'
         game.current_state = top.current_state
@@ -144,9 +142,9 @@ def iterative_minimax_strategy(game: Game) -> Union[str, int]:
                     top.current_state.make_move(move), move))
 
             top.children = new_nodes
-            stack.add(top)
+            stack.append(top)
             for node in new_nodes:
-                stack.add(node)
+                stack.append(node)
         else:
             # Get scores for all of top's children
             scores = []
@@ -158,7 +156,7 @@ def iterative_minimax_strategy(game: Game) -> Union[str, int]:
 
             # If the stack is empty then this is the last item and thus the
             # original current_state, so get the best_move
-            if stack.is_empty():
+            if len(stack) == 0:
                 best_move = top.children[scores.index(max(scores))].move
 
     # Reset game's current_state to state before move-checking
