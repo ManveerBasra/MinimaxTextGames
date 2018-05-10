@@ -3,8 +3,8 @@ The module used to play our games.
 """
 from typing import Any, Callable
 
-from stonehenge import StonehengeGame
-from subtract_square_game import SubtractSquareGame
+from games/stonehenge import StonehengeGame
+from games/subtract_square import SubtractSquareGame
 
 from strategy import *
 
