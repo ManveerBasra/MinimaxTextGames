@@ -12,4 +12,4 @@ If you do make your own game using these subclasses, make sure to add the Game c
 ### Minimax
 Both the minimax strategies work by, either recursively or iteratively, looking through all possible moves and picking a move that results in the highest possible 'score', or a move where if both players play perfectly, the current player will win.
 
-Since it does look through ALL possible moves, it can take a long time to run; for example, running minimax on a new Stonehenge Game of board size 3 can take over 4 hours to run. I am currently working on optimizing this algorithm.
+Since it does look through ALL possible moves, it can take a long time to run; for example, running minimax on a new Stonehenge Game of board size 3 can take over 4 hours to run. I am currently working on optimizing this algorith using methods such as Memoization, Alpha-beta pruning, and Myopia.
