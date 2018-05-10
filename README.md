@@ -10,6 +10,14 @@ The `game_interface.py` file relies on the generic Game and State classes in `ga
 If you do make your own game using these subclasses, make sure to add the Game class to the `playable_games` dictionary on line 11 of `game_interface.py`.
 
 ### Minimax
-Both the minimax strategies work by, either recursively or iteratively, looking through all possible moves and picking a move that results in the highest possible 'score', or a move where if both players play perfectly, the current player will win.
+All the minimax strategies work by checking all possible moves from the current state, and picking a move that results in the highest possible 'score', or a move where if both players play perfectly, the current player will win. If this is not possible it picks a move where a tie results, or a loss as a last resort.
 
-Since it does look through ALL possible moves, it can take a long time to run; for example, running minimax on a new Stonehenge Game of board size 3 can take over 4 hours to run. I am currently working on optimizing this algorithm using methods such as Memoization, Alpha-beta pruning, and Myopia.
+#### Recursive/Iterative
+Both the recursive and iterative minimax strategies work by, either recursively or iteratively, looking through all possible moves and picking a move.
+
+Since it does look through ALL possible moves, it can take a long time to run; for example, running minimax on a new Stonehenge Game of board size 3 can take over 4 hours to run.
+
+#### Memoization
+Memoization is similar to the recursive minimax strategy, however at each step of minimax, once a state's highest possible score has been found it gets added to a dictionary. Therefore, whenever we encounter a similiar state we already have it's score and don't have to do a recursive call on it.
+
+This is one method of optimizing the recursive strategy to run faster/more efficiently.
