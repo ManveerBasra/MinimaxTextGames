@@ -1,7 +1,7 @@
 """
 A module for strategies.
 """
-from typing import Union
+from typing import Union, Dict
 from game_state import GameState
 from game import Game
 from node import Node
@@ -163,3 +163,85 @@ def iterative_minimax_strategy(game: Game) -> Union[str, int]:
     game.current_state = current_state
 
     return best_move
+
+
+def memoization_minimax_strategy(game: Game) -> Union[str, int]:
+    """
+    Return a move by recursively looking at possible moves from the
+    current_state and returning one that provides the best outcome.
+
+    Uses a dictionary to keep track of seen states and skips state if it's
+    already in dictionary
+    """
+    current_state = game.current_state
+
+    scores = []
+    possible_moves = current_state.get_possible_moves()
+    seen_states = {}
+
+    # Get scores for all current possible moves
+    for move in possible_moves:
+        new_state = current_state.make_move(move)
+        new_state_repr = new_state.__repr__
+
+        # Check if new_state has already been seen, if so get its score, else
+        # do a recursive call
+        if new_state_repr in seen_states.keys():
+            score = seen_states[new_state_repr]
+        else:
+            score = \
+                memoization_minimax_helper(game, new_state, seen_states) * -1
+
+        scores.append(score)
+        seen_states[new_state_repr] = score
+
+    # Reset game's current_state to state before move-checking
+    game.current_state = current_state
+
+    # Return the move that resulted in the highest score
+    return possible_moves[scores.index(max(scores))]
+
+
+def memoization_minimax_helper(game: Game, state: GameState,
+                               seen_states: Dict[str, int]) -> int:
+    """
+    Helper function for recursive_minimax_strategy. Recursively checks
+    possible_moves for each state and returns the highest score for the current
+    state.
+
+    Uses a dictionary to keep track of seen states and skips state if it's
+    already in dictionary
+    """
+    game.current_state = state
+    player = state.get_current_player_name()
+    opponent = 'p1' if player == 'p2' else 'p2'
+
+    # If game is over, return score based on who won
+    if game.is_over(state):
+        if game.is_winner(player):
+            return 1
+        elif game.is_winner(opponent):
+            return -1
+        return 0
+
+    scores = []
+    possible_moves = state.get_possible_moves()
+
+    # Get scores for all current possible moves
+    for move in possible_moves:
+        new_state = state.make_move(move)
+        new_state_repr = new_state.__repr__
+
+        # Check if new_state has already been seen, if so get its score, else
+        # do a recursive call
+        if new_state_repr in seen_states.keys():
+            score = seen_states[new_state_repr]
+        else:
+            score = \
+                memoization_minimax_helper(game, new_state, seen_states) * -1
+
+        scores.append(score)
+        seen_states[new_state_repr] = score
+
+    # Return the highest resulting score
+    return max(scores)

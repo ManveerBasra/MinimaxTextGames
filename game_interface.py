@@ -14,7 +14,8 @@ playable_games = {'s': SubtractSquareGame,
 usable_strategies = {'i': interactive_strategy,
                      'ro': rough_outcome_strategy,
                      'mr': recursive_minimax_strategy,
-                     'mi': iterative_minimax_strategy}
+                     'mi': iterative_minimax_strategy,
+                     'mm': memoization_minimax_strategy}
 
 
 class GameInterface:
