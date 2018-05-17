@@ -21,3 +21,8 @@ Since it does look through ALL possible moves, it can take a long time to run; f
 Memoization is similar to the recursive minimax strategy, however at each step of minimax, once a state's highest possible score has been found it gets added to a dictionary. Therefore, whenever we encounter a similiar state we already have it's score and don't have to do a recursive call on it.
 
 This is one method of optimizing the recursive strategy to run faster/more efficiently.
+
+#### Myopia
+Myopia is also similar to the recursive minimax strategy, however it limits the depth of recursion to 4. Once depth 4 is reached, it determines a 'best_guess' using a state's rough_outcome() strategy of whether we think the state will result in a win, tie, or loss.
+
+This method sacrifices accuracy for speed.
