@@ -205,7 +205,7 @@ def memoization_minimax_strategy(game: Game) -> Union[str, int]:
 def memoization_minimax_helper(game: Game, state: GameState,
                                seen_states: Dict[str, int]) -> int:
     """
-    Helper function for recursive_minimax_strategy. Recursively checks
+    Helper function for memoization_minimax_strategy. Recursively checks
     possible_moves for each state and returns the highest score for the current
     state.
 
@@ -242,6 +242,66 @@ def memoization_minimax_helper(game: Game, state: GameState,
 
         scores.append(score)
         seen_states[new_state_repr] = score
+
+    # Return the highest resulting score
+    return max(scores)
+
+
+def myopia_minimax_strategy(game: Game) -> Union[str, int]:
+    """
+    Return a move by recursively looking at possible moves from the
+    current_state and returning one that provides the best outcome.
+
+    Limits depth of recursion to 4
+    """
+    current_state = game.current_state
+
+    scores = []
+    possible_moves = current_state.get_possible_moves()
+
+    # Get scores for all current possible moves
+    for move in possible_moves:
+        new_state = current_state.make_move(move)
+        scores.append(myopia_minimax_helper(game, new_state, 1) * -1)
+
+    # Reset game's current_state to state before move-checking
+    game.current_state = current_state
+
+    # Return the move that resulted in the highest score
+    return possible_moves[scores.index(max(scores))]
+
+
+def myopia_minimax_helper(game: Game, state: GameState, depth: int) -> int:
+    """
+    Helper function for myopia_minimax_strategy. Recursively checks
+    possible_moves for each state and returns the highest score for the current
+    state.
+
+    Limits depth of recursion to 4 and uses state.rough_outcome() once depth 4
+    is reached.
+    """
+    game.current_state = state
+    player = state.get_current_player_name()
+    opponent = 'p1' if player == 'p2' else 'p2'
+
+    # If game is over, return score based on who won
+    if game.is_over(state):
+        if game.is_winner(player):
+            return 1
+        elif game.is_winner(opponent):
+            return -1
+        return 0
+
+    if depth == 4:
+        return state.rough_outcome()
+
+    scores = []
+    possible_moves = state.get_possible_moves()
+
+    # Get scores for all current possible moves
+    for move in possible_moves:
+        new_state = state.make_move(move)
+        scores.append(myopia_minimax_helper(game, new_state, depth + 1) * -1)
 
     # Return the highest resulting score
     return max(scores)
