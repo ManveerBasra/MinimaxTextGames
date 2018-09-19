@@ -1,5 +1,6 @@
 # MinimaxTextGames
-Text based games with numerous strategies including recursive and iterative minimax.
+Text based games with numerous strategies including recursive and iterative minimax. <br>
+Based off of a CSC148 Assignment at UofT.
  
 To play, run `game_interface.py`
 
